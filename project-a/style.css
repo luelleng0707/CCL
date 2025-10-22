@@ -1,73 +1,110 @@
 /*
-Template for IMA's Creative Coding Lab 
-
-Project A: Generative Creatures
-CCLaboratories Biodiversity Atlas 
+CCLab Project A: Generative Creatures
+Bloby nom nom — discovered accidentally at 3AM
 */
 
 body {
-    background-color: white;
-    color: DimGray;
-    font-family: 'Courier ', Courier, monospace;
+    background-color: #03050a; /* deep lab-night blue */
+    color: #d0f0ff;
+    font-family: 'Courier New', monospace;
     font-size: 1em;
-    line-height: 1.5em;
+    line-height: 1.6em;
+    margin: 0;
+    padding: 0;
 }
 
 /* title */
 #title-wrapper {
     text-align: center;
+    margin-top: 60px;
 }
 
 .headline {
-    font-size: 3em;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-weight: 600;
-    margin-top: 80px;
-    margin-bottom: 60px;
+    font-size: 3.5em;
+    color: #8feeff;
+    text-shadow: 0px 0px 20px #00ffffaa, 0 0 40px #66e0ff55;
+    letter-spacing: 3px;
+    animation: flicker 2s infinite alternate;
 }
 
-/* main content */
+@keyframes flicker {
+    0% { opacity: 1; text-shadow: 0 0 8px #33eaff; }
+    50% { opacity: 0.85; text-shadow: 0 0 20px #8feeff; }
+    100% { opacity: 1; text-shadow: 0 0 12px #00ffff; }
+}
+
+/* main content wrapper */
 #main-wrapper {
     width: 800px;
     position: relative;
     margin: auto;
+    background: rgba(0, 20, 40, 0.4);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 25px #00ccff33;
 }
 
+/* color classes */
 .black {
-    color: black;
+    color: #d0f0ff;
 }
 
 .red {
-    color: DeepPink;
+    color: #ff5caa;
+    text-shadow: 0 0 8px #ff66c4;
 }
 
 .green {
-    color: LightSeaGreen;
+    color: #56ffc5;
+    text-shadow: 0 0 8px #00ff99;
 }
 
 .yellow {
-    color: GoldenRod;
+    color: #ffe066;
+    text-shadow: 0 0 10px #ffee88;
 }
 
+/* section titles */
+h3 {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* keep the clean two-column layout */
 .two-columns {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .left {
-    width: 50%;
-    padding: 0px 10px 0px 0px;
+    width: 48%;
+    padding-right: 10px;
 }
 
 .right {
-    width: 50%;
-    padding: 0px 0px 0px 10px;
+    width: 48%;
+    padding-left: 10px;
 }
 
+p, li {
+    margin-bottom: 15px;
+}
+
+/* bullet points */
+ul {
+    list-style-type: "⚡ ";
+    padding-left: 20px;
+}
+
+/* footer */
 #footer {
     text-align: center;
-    font-size: 0.7em;
+    font-size: 0.8em;
     margin-top: 60px;
     padding-bottom: 30px;
+    color: #66ccff;
+    text-shadow: 0 0 5px #0099ff;
 }
 
 /* home button */
@@ -75,25 +112,44 @@ body {
     position: fixed;
     right: 15px;
     top: 15px;
-    padding: 5px 10px;
-    color: dimgrey;
-    border: solid grey 0.5px;
-    font-size: 0.6em;
+    padding: 6px 12px;
+    color: #00ffff;
+    border: solid #00ffff66 1px;
+    border-radius: 10px;
+    font-size: 0.7em;
     text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+    box-shadow: 0 0 10px #00ffff33;
 }
 
 #home a:hover {
-    background-color: black;
+    background-color: #00ffff22;
     color: white;
-    font-weight: bold;
+    box-shadow: 0 0 20px #00ffff;
 }
 
-/* p5.js sketch */
+/* p5.js sketch canvas */
 canvas {
     display: block;
+    margin: 0 auto;
+    border-radius: 20px;
+    box-shadow: 0 0 30px #00ffff33;
 }
 
 #p5-canvas-container {
     margin: auto;
     width: 800px;
+}
+
+/* hover glow effect for paragraphs and list items */
+@keyframes pulseText {
+    0% { text-shadow: 0 0 4px #00ffff; }
+    50% { text-shadow: 0 0 10px #8feeff; }
+    100% { text-shadow: 0 0 4px #00ffff; }
+}
+
+p:hover, li:hover {
+    animation: pulseText 1.5s infinite alternate;
 }

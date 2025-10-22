@@ -1,9 +1,3 @@
-/*
-Template for IMA's Creative Coding Lab 
-
-Project A: Generative Creatures
-CCLaboratories Biodiversity Atlas 
-*/
 let scl = 20;
 let inc = 0.1;
 let zoff = 0;
@@ -12,7 +6,7 @@ let blobX = 0;
 let blobY = 0;
 let blobSize = 0;
 let growing = false;
-let dragging = false; // check if user’s holding blob
+let dragging = false;
 
 function setup() {
     let canvas = createCanvas(800, 500);
@@ -22,7 +16,7 @@ function setup() {
 }
 
 function draw() {
-  // smooth trail fade
+  // gentle fade to keep those flowy trails
   fill(0, 20);
   rect(0, 0, width, height);
 
@@ -32,7 +26,15 @@ function draw() {
     growMold(blobX, blobY);
   }
 
-  // drag movement logic
+  // erase only inside the glow zone
+  if (growing) {
+    erase(1, 0);
+    noStroke();
+    circle(blobX, blobY, blobSize * 2.4);
+    noErase();
+  }
+
+  // dragging makes blob follow da mouse
   if (dragging) {
     blobX = mouseX;
     blobY = mouseY;
@@ -50,8 +52,7 @@ function drawFlowField() {
       let px = x * scl;
       let py = y * scl;
 
-      // don’t draw too close to blob
-      if (dist(px, py, blobX, blobY) < blobSize + 80) {
+      if (dist(px, py, blobX, blobY) < blobSize *2) {
         xoff += inc;
         continue;
       }
@@ -68,21 +69,21 @@ function drawFlowField() {
     yoff += inc;
   }
 
-  zoff += 0.005;
+  // mouse kinda affects background flow speed
+  zoff += map(mouseX, 0, width, 0.001, 0.01);
 }
 
 function mousePressed() {
-  // if blob not yet active, spawn it
-  if (!growing) {
+  // if clicking near blob → drag
+  let d = dist(mouseX, mouseY, blobX, blobY);
+  if (d < blobSize * 1.2) {
+    dragging = true;
+  } else {
+    // otherwise spawn a new blob
     blobX = mouseX;
     blobY = mouseY;
     blobSize = 5;
     growing = true;
-  }
-
-  // start dragging if clicked near blob
-  if (dist(mouseX, mouseY, blobX, blobY) < blobSize) {
-    dragging = true;
   }
 }
 
@@ -93,18 +94,25 @@ function mouseReleased() {
 function growMold(x, y) {
   noStroke();
 
-  // blob keeps expanding slowly
-  blobSize += 0.15;
+  // stop growing when hitting canvas edges
+  let reachedWall = (x - blobSize <= 0 ||
+                     x + blobSize >= width ||
+                     y - blobSize <= 0 ||
+                     y + blobSize >= height);
 
-  // draw glowing core
+  if (!reachedWall) {
+    blobSize += 0.15; // still growing
+  }
+
+  // gooey layered circles
   for (let r = blobSize; r > 0; r -= 3) {
     let alpha = map(r, 0, blobSize, 180, 20);
     fill(100, 200, 255, alpha);
     circle(x, y, r * 2 + sin(frameCount * 0.05) * 4);
   }
 
-  // aura glow
+  // outer glow aura
   noFill();
-  stroke(120, 200, 255, 30);
-  circle(x, y, blobSize * 2.2);
+  stroke(120, 200, 255, 40);
+  circle(x, y, blobSize * 3.5);
 }
